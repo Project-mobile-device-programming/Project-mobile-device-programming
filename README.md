@@ -10,5 +10,7 @@
 ![image](https://github.com/user-attachments/assets/bf2cb19a-981f-4dd7-968c-f346fa362193)
 ![image](https://github.com/user-attachments/assets/1b54b03b-be0b-4808-b229-99f1506b007c)
 ![image](https://github.com/user-attachments/assets/cf389fa3-dae6-4c6d-ac7c-932cc6db7282)
+## GIAO DIỆN BAN ĐẦU CỦA APP
+
 ## NOTE: Dự án đang trong quá trình hoàn thiện.
 
