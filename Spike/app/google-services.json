@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "250300788769",
+    "project_id": "spike-82e00",
+    "storage_bucket": "spike-82e00.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250300788769:android:ca9414f44b68949f903360",
+        "android_client_info": {
+          "package_name": "com.example.spike"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcJHiL8zFSPIKetOp-b16RO_7jufpjKGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
