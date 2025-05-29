@@ -30,5 +30,53 @@ Tính trực quan và bố cục rõ ràng: Xem xét liệu các thành phần g
 Khả năng nhận diện thương hiệu: Đánh giá hiệu quả của việc sử dụng logo và khẩu hiệu trong việc xây dựng và củng cố nhận diện thương hiệu "SPIKETUNE" ngay từ những tương tác đầu tiên của người dùng.
 Sự hiện diện và chức năng cơ bản của các thành phần: Xác minh rằng tất cả các thành phần giao diện cần thiết cho các chức năng cơ bản như chào đón người dùng, đăng nhập và đăng ký (hoặc thu thập thông tin) đều đã được triển khai ở mức độ ban đầu.
 Tuân thủ các nguyên tắc thiết kế UI/UX cơ bản: Đánh giá xem các thiết kế ban đầu có tuân theo các nguyên tắc cơ bản về trải nghiệm người dùng, chẳng hạn như kích thước các phần tử tương tác đủ lớn, độ tương phản màu sắc phù hợp và luồng tương tác logic hay không.
-## NOTE: Dự án đang trong quá trình hoàn thiện.
+### Tiếp tục thực thi dự án:
+#### Giai đoạn build app, application development and improvement, complete complement, anticipated expansion.
+![image](https://github.com/user-attachments/assets/e0a93897-2c1f-42d3-9f49-75f9f8ba14c6)
+![image](https://github.com/user-attachments/assets/5ab85975-7aef-4f67-91e3-872292db7555)
+![image](https://github.com/user-attachments/assets/e7eb91f6-0c27-4928-a73b-505ee26a8939)
+![image](https://github.com/user-attachments/assets/69395b9c-baea-417f-ae9e-9fbab5b822e6)
+![image](https://github.com/user-attachments/assets/9d49bece-8d55-4e08-b8be-be54ec930a08)
+![image](https://github.com/user-attachments/assets/a1b9645f-363d-4291-903d-851e7d51d0e7)
+![image](https://github.com/user-attachments/assets/53107660-969c-4660-9f61-515a16b42fca)
+![image](https://github.com/user-attachments/assets/550a9adf-a840-4042-9d26-90668f330845)
+![image](https://github.com/user-attachments/assets/d7ca1167-14a5-400f-bd96-034286a8fbd9)
+![image](https://github.com/user-attachments/assets/faabcfcd-a694-4728-b641-dcde218d1c4c)
+![image](https://github.com/user-attachments/assets/ca6a4e83-9b61-457d-9fa9-9c6b2aff928d)
+![image](https://github.com/user-attachments/assets/83a5cc0a-6fe4-429a-aa2f-bf27bef34a2a)
+![image](https://github.com/user-attachments/assets/979fb9b3-f033-4473-ae97-e9e9c2adba31)
+![image](https://github.com/user-attachments/assets/326ade39-efc3-4288-b90e-5c4597eee270)
+![image](https://github.com/user-attachments/assets/2efc197a-43a5-427a-8fed-701235378f17)
+
+----------
+
+![image](https://github.com/user-attachments/assets/9e8b4624-c7fb-4bc2-923e-9171f65485e2)
+![image](https://github.com/user-attachments/assets/9bd1cc48-1a75-4432-83ad-f00872a8c35d)
+![image](https://github.com/user-attachments/assets/5e4692a4-3d09-4452-a7cf-1fed1cf2988d)
+![image](https://github.com/user-attachments/assets/33db4ebb-347f-43db-82c3-91b9e913872d)
+![image](https://github.com/user-attachments/assets/1c588a04-d650-4803-973b-d9ac79085ea0)
+![image](https://github.com/user-attachments/assets/70e94950-b432-4132-9774-f2264d9052c2)
+![image](https://github.com/user-attachments/assets/914e4404-673f-4d5c-9a5e-50938180ab03)
+![image](https://github.com/user-attachments/assets/06bfd353-40e4-469f-9ddc-0711d6a45732)
+![image](https://github.com/user-attachments/assets/00e59480-c33a-4d9b-8020-1ca3fca391cf)
+![image](https://github.com/user-attachments/assets/4b540223-055a-4f44-b7d8-ac24b7203037)
+![image](https://github.com/user-attachments/assets/a279e9f2-f83a-4dbe-9ee8-fdbf225a0ff3)
+## DỰ ÁN SẮP HOÀN THIỆN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
