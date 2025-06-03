@@ -66,7 +66,7 @@ Tuân thủ các nguyên tắc thiết kế UI/UX cơ bản: Đánh giá xem cá
 ## LICENSE
 MIT License
 
-Copyright (c) 2025 Trần Thế Hảo
+Copyright (c) 2025 MobileDeviceProgramming
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
