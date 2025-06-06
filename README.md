@@ -1,4 +1,4 @@
-# Project-mobile-device-programming
+![image](https://github.com/user-attachments/assets/afd7b401-4d1f-4ee8-b3be-116f8b34a9e4)# Project-mobile-device-programming
 ## KẾ HOẠCH TRIỂN KHAI HỆ THỐNG THU PHÍ BẢN QUYỀN NHẠC (1 TUẦN)
 ![image](https://github.com/user-attachments/assets/8c49215d-6719-41fd-83c1-433885dc2aba)
 ![image](https://github.com/user-attachments/assets/20b87999-0397-4fe0-a3a4-b45b6390f324)
@@ -10,7 +10,13 @@
 ![image](https://github.com/user-attachments/assets/bf2cb19a-981f-4dd7-968c-f346fa362193)
 ![image](https://github.com/user-attachments/assets/1b54b03b-be0b-4808-b229-99f1506b007c)
 ![image](https://github.com/user-attachments/assets/cf389fa3-dae6-4c6d-ac7c-932cc6db7282)
-## Đang ở giai đoạn thực thi 
+## System flow
+![image](https://github.com/user-attachments/assets/f5fc9f74-9153-4d1e-8e98-b87768247c85)
+![image](https://github.com/user-attachments/assets/2ff65670-3504-4226-91c3-b3b1b567da1f)
+![image](https://github.com/user-attachments/assets/0009dd6b-e4cb-4412-b386-5c05c586bace)
+![image](https://github.com/user-attachments/assets/176de833-2c95-4ce5-a7f3-73005304364a)
+![image](https://github.com/user-attachments/assets/43cc31d5-0da3-4e3f-8e88-805cbb3ca010)
+
 ### Mô tả giai đoạn dự án:
 
 Dự án hiện đang trong giai đoạn thực thi và tập trung vào việc xây dựng một ứng dụng di động có tên "SPIKETUNE". Ứng dụng này được thiết kế nhằm cung cấp một nền tảng độc đáo, nơi người dùng có thể tương tác với âm nhạc một cách sáng tạo, kết hợp các yếu tố âm thanh để kể những câu chuyện mang đậm dấu ấn cá nhân.
