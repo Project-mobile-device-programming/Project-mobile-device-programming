@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "openid-client": "^6.5.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
+  },
+  "scripts": {
+    "start": "node --loader ts-node/esm server/index.ts"
+  }
+}
