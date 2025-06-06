@@ -1,0 +1,10 @@
+- [x] Research Spotify app architecture and system flow.
+- [x] Identify and select key components for the diagram.
+- [x] Design and create the system flow diagram.
+- [x] Validate the diagram for accuracy and completeness.
+- [x] Report and send the diagram to the user.
+- [x] Select static React template for website.
+- [x] Create webpage to display Spotify diagram.
+- [x] Test and finalize website content.
+- [x] Deploy website permanently.
+- [x] Report and send permanent website URL to user.
