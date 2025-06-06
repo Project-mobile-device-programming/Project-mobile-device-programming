@@ -1,0 +1,96 @@
+digraph SpotifySystemFlow {
+    rankdir=LR;
+    node [shape=box, style=filled, fillcolor=lightgrey];
+    splines=ortho;
+
+    subgraph cluster_client {
+        label = "Client Apps";
+        style=filled;
+        color=lightblue;
+        Client [label="User Device\n(Mobile, Web, Desktop)"];
+    }
+
+    subgraph cluster_backend {
+        label = "Spotify Backend (Microservices)";
+        style=filled;
+        color=lightyellow;
+
+        LB [label="Load Balancer"];
+        APIGateway [label="API Gateway / Access Point"];
+
+        subgraph cluster_services {
+            label = "Core Microservices";
+            style=filled;
+            color=palegreen;
+            AuthService [label="Authentication"];
+            SearchService [label="Search"];
+            PlaybackService [label="Playback"];
+            PlaylistService [label="Playlists"];
+            RecommendationService [label="Recommendations"];
+            SocialService [label="Social Features"];
+            PaymentService [label="Payment"];
+        }
+
+        subgraph cluster_data {
+            label = "Data Stores";
+            style=filled;
+            color=lightcoral;
+            UserDB [label="User Database\n(Cassandra/PostgreSQL)"];
+            MetadataDB [label="Song Metadata DB\n(Cassandra)"];
+            PlaylistDB [label="Playlist DB"];
+        }
+
+        subgraph cluster_infra {
+            label = "Infrastructure & Processing";
+            style=filled;
+            color=lightsalmon;
+            MessageQueue [label="Message Queue\n(Kafka/PubSub)"];
+            DataWarehouse [label="Data Warehouse\n(Hadoop)"];
+            RecEngine [label="Recommendation Engine\n(Latent Factor Models)"];
+        }
+    }
+
+    CDN [label="Content Delivery Network (CDN)\n(Audio Files)", shape=cylinder, style=filled, fillcolor=skyblue];
+
+    // Connections
+    Client -> LB [label="Requests (Login, Search, Play, etc.)"];
+    LB -> APIGateway;
+    APIGateway -> AuthService;
+    APIGateway -> SearchService;
+    APIGateway -> PlaybackService;
+    APIGateway -> PlaylistService;
+    APIGateway -> RecommendationService;
+    APIGateway -> SocialService;
+    APIGateway -> PaymentService;
+
+    AuthService -> UserDB;
+    SearchService -> MetadataDB;
+    PlaybackService -> MetadataDB;
+    PlaybackService -> CDN [label="Request Audio Stream"];
+    CDN -> Client [label="Audio Stream"];
+    PlaylistService -> PlaylistDB;
+    PlaylistService -> UserDB; // User's playlists
+    RecommendationService -> RecEngine;
+    RecEngine -> UserDB;
+    RecEngine -> MetadataDB;
+    RecEngine -> DataWarehouse; // User listening history, etc.
+    SocialService -> UserDB; // Friend info, activity
+
+    // Internal communication / Data flow
+    AuthService -> MessageQueue [label="Login Events"];
+    PlaybackService -> MessageQueue [label="Playback Events"];
+    PlaylistService -> MessageQueue [label="Playlist Updates"];
+    SocialService -> MessageQueue [label="Social Events"];
+
+    MessageQueue -> DataWarehouse [label="Ingest Events"];
+    DataWarehouse -> RecEngine [label="Processed Data"];
+
+    PaymentService -> UserDB; // Subscription status
+    // PaymentService -> External Payment Gateway (not shown for simplicity)
+
+    // Service dependencies (simplified)
+    SearchService -> RecommendationService [style=dashed, label="Related Content"];
+    PlaylistService -> SearchService [style=dashed, label="Add Songs"];
+
+}
+

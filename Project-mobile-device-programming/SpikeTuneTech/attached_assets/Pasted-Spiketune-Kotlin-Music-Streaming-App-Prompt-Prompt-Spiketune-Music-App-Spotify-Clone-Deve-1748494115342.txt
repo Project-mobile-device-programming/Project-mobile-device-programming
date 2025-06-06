@@ -1,0 +1,42 @@
+Spiketune - Kotlin Music Streaming App Prompt
+
+Prompt: Spiketune Music App (Spotify Clone)
+
+Develop a high-performance music streaming application named "Spiketune" using Kotlin and Jetpack Compose. The app must follow Clean Architecture (MVVM) and apply all four Object-Oriented Programming principles: Encapsulation, Inheritance, Polymorphism, and Abstraction. Ensure a fluid and responsive user experience across all components.
+
+Core Features:
+- Splash Screen: Displayed on launch, centered with the app logo and the text:
+      - SPIKETUNE -
+      - Yoursoundtrack - Yourstory
+  Featuring subtle animations for brand feel.
+
+- Home Screen: Showcase trending music, personalized playlists, and suggestions. Use real-time or mock data from a music API (Spotify/Last.fm).
+
+- Music Player: Provide seamless playback with play/pause, next/previous, seek bar, shuffle/repeat, and background play support.
+
+- Library: Manage and view user’s saved albums, artists, and playlists.
+
+- Downloads: Allow users to view and manage offline saved songs.
+
+- Favorites: Enable users to mark/unmark favorite tracks and access them quickly.
+
+- Search: Smart search with live suggestions for songs, artists, and albums.
+
+- Authentication: Implement secure login/logout using Firebase Authentication.
+
+- User Profile: View/update user information.
+
+- Settings: Users can manage themes, playback settings, privacy, and preferences.
+
+Technical Requirements:
+- Full OOP Design: Classes must reflect proper encapsulation, abstraction layers, reuse through inheritance, and function polymorphism.
+- Architecture: Follow MVVM, with Repository and UseCase layers for scalability.
+- Navigation: Use Jetpack Compose Navigation for clean transitions.
+- UI: Material 3 design with support for dark/light themes and responsive layout.
+- State Management: Use Kotlin Flow or LiveData with ViewModel for reactive UI updates.
+- Background Threads: Use Kotlin Coroutines to manage music streaming and prevent UI blockages.
+- Offline Support: Cache metadata (Room/DataStore) for offline user interaction.
+- Adaptive Layouts: Use Compose best practices for responsiveness across devices.
+
+Goal:
+Build a clean, professional, and scalable Kotlin app that mimics the real-world streaming experience, featuring a stylish UI, full user engagement features, and a modern development stack.
