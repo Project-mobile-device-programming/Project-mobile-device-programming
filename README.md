@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/afd7b401-4d1f-4ee8-b3be-116f8b34a9e4)# Project-mobile-device-programming
+# Project-mobile-device-programming
 ## KẾ HOẠCH TRIỂN KHAI HỆ THỐNG THU PHÍ BẢN QUYỀN NHẠC (1 TUẦN)
 ![image](https://github.com/user-attachments/assets/8c49215d-6719-41fd-83c1-433885dc2aba)
 ![image](https://github.com/user-attachments/assets/20b87999-0397-4fe0-a3a4-b45b6390f324)
@@ -11,11 +11,112 @@
 ![image](https://github.com/user-attachments/assets/1b54b03b-be0b-4808-b229-99f1506b007c)
 ![image](https://github.com/user-attachments/assets/cf389fa3-dae6-4c6d-ac7c-932cc6db7282)
 ## System flow
+
+digraph SpiketuneSystemFlow {
+    rankdir=LR;
+    node [shape=box, style=filled, fillcolor=lightgrey];
+    splines=ortho;
+
+    subgraph cluster_client {
+        label = "Client Apps";
+        style=filled;
+        color=lightblue;
+        Client [label="User Device\n(Mobile, Web, Desktop)"];
+    }
+
+    subgraph cluster_backend {
+        label = "Spotify Backend (Microservices)";
+        style=filled;
+        color=lightyellow;
+
+        LB [label="Load Balancer"];
+        APIGateway [label="API Gateway / Access Point"];
+
+        subgraph cluster_services {
+            label = "Core Microservices";
+            style=filled;
+            color=palegreen;
+            AuthService [label="Authentication"];
+            SearchService [label="Search"];
+            PlaybackService [label="Playback"];
+            PlaylistService [label="Playlists"];
+            RecommendationService [label="Recommendations"];
+            SocialService [label="Social Features"];
+            PaymentService [label="Payment"];
+        }
+
+        subgraph cluster_data {
+            label = "Data Stores";
+            style=filled;
+            color=lightcoral;
+            UserDB [label="User Database\n(Cassandra/PostgreSQL)"];
+            MetadataDB [label="Song Metadata DB\n(Cassandra)"];
+            PlaylistDB [label="Playlist DB"];
+        }
+
+        subgraph cluster_infra {
+            label = "Infrastructure & Processing";
+            style=filled;
+            color=lightsalmon;
+            MessageQueue [label="Message Queue\n(Kafka/PubSub)"];
+            DataWarehouse [label="Data Warehouse\n(Hadoop)"];
+            RecEngine [label="Recommendation Engine\n(Latent Factor Models)"];
+        }
+    }
+
+    CDN [label="Content Delivery Network (CDN)\n(Audio Files)", shape=cylinder, style=filled, fillcolor=skyblue];
+
+    // Connections
+    Client -> LB [label="Requests (Login, Search, Play, etc.)"];
+    LB -> APIGateway;
+    APIGateway -> AuthService;
+    APIGateway -> SearchService;
+    APIGateway -> PlaybackService;
+    APIGateway -> PlaylistService;
+    APIGateway -> RecommendationService;
+    APIGateway -> SocialService;
+    APIGateway -> PaymentService;
+
+    AuthService -> UserDB;
+    SearchService -> MetadataDB;
+    PlaybackService -> MetadataDB;
+    PlaybackService -> CDN [label="Request Audio Stream"];
+    CDN -> Client [label="Audio Stream"];
+    PlaylistService -> PlaylistDB;
+    PlaylistService -> UserDB; // User's playlists
+    RecommendationService -> RecEngine;
+    RecEngine -> UserDB;
+    RecEngine -> MetadataDB;
+    RecEngine -> DataWarehouse; // User listening history, etc.
+    SocialService -> UserDB; // Friend info, activity
+
+    // Internal communication / Data flow
+    AuthService -> MessageQueue [label="Login Events"];
+    PlaybackService -> MessageQueue [label="Playback Events"];
+    PlaylistService -> MessageQueue [label="Playlist Updates"];
+    SocialService -> MessageQueue [label="Social Events"];
+
+    MessageQueue -> DataWarehouse [label="Ingest Events"];
+    DataWarehouse -> RecEngine [label="Processed Data"];
+
+    PaymentService -> UserDB; // Subscription status
+    // PaymentService -> External Payment Gateway (not shown for simplicity)
+
+    // Service dependencies (simplified)
+    SearchService -> RecommendationService [style=dashed, label="Related Content"];
+    PlaylistService -> SearchService [style=dashed, label="Add Songs"];
+
+}
+
+
+
+
 ![image](https://github.com/user-attachments/assets/f5fc9f74-9153-4d1e-8e98-b87768247c85)
 ![image](https://github.com/user-attachments/assets/2ff65670-3504-4226-91c3-b3b1b567da1f)
 ![image](https://github.com/user-attachments/assets/0009dd6b-e4cb-4412-b386-5c05c586bace)
 ![image](https://github.com/user-attachments/assets/176de833-2c95-4ce5-a7f3-73005304364a)
 ![image](https://github.com/user-attachments/assets/43cc31d5-0da3-4e3f-8e88-805cbb3ca010)
+![image](https://github.com/user-attachments/assets/afd7b401-4d1f-4ee8-b3be-116f8b34a9e4)
 
 ### Mô tả giai đoạn dự án:
 
