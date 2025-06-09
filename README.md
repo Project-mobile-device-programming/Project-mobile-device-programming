@@ -109,8 +109,6 @@ digraph SpiketuneSystemFlow {
 }
 
 
-
-
 ![image](https://github.com/user-attachments/assets/f5fc9f74-9153-4d1e-8e98-b87768247c85)
 ![image](https://github.com/user-attachments/assets/2ff65670-3504-4226-91c3-b3b1b567da1f)
 ![image](https://github.com/user-attachments/assets/0009dd6b-e4cb-4412-b386-5c05c586bace)
@@ -175,28 +173,45 @@ Tuân thủ các nguyên tắc thiết kế UI/UX cơ bản: Đánh giá xem cá
 Rest-express (Tên dự án: SpikeTuneTech )
 Đây là một dự án ứng dụng web được xây dựng với Express.js ở backend, tích hợp với cơ sở dữ liệu PostgreSQL (qua Drizzle ORM và Neon Serverless), và sử dụng các công nghệ frontend hiện đại như React và Tailwind CSS. Dự án này cũng tích hợp xác thực OpenID Connect sử dụng openid-client và passport.
 ## Mục lục
+
 •	Giới thiệu
+
 •	Tính năng
+
 •	Cài đặt 
+
 o	Yêu cầu
+
 o	Cài đặt phụ thuộc
+
 o	Biến môi trường
+
 •	Cách chạy dự án 
+
 o	Chế độ phát triển
+
 o	Chế độ sản xuất
+
 •	Cơ sở dữ liệu
+
 •	Cấu trúc dự án
+
 •	Các công nghệ chính
+
 •	Giấy phép
+
 ## Giới thiệu
 (Viết một đoạn ngắn giới thiệu về dự án của bạn. Ví dụ:) Dự án này là một nền tảng quản lý nhạc trực tuyến (hoặc một mô tả khác phù hợp với ứng dụng của bạn) cho phép người dùng đăng nhập, quản lý profile, và tương tác với nội dung. Nó được thiết kế để dễ dàng bảo trì, mở rộng và tái sử dụng nhờ việc tuân thủ các nguyên tắc thiết kế phần mềm hiện đại và OOP.
 ## Tính năng
-(Liệt kê các tính năng chính của ứng dụng bạn. Ví dụ:)
 •	Xác thực người dùng qua OpenID Connect.
+
 •	Quản lý phiên (session) người dùng.
+
 •	Tương tác với cơ sở dữ liệu PostgreSQL.
+
 •	Giao diện người dùng được xây dựng với React và các thư viện Radix UI, Tailwind CSS.
-•	(Thêm các tính năng cụ thể khác của ứng dụng của bạn)
+
+•	(Các tính năng cụ thể khác)
 ## Cài đặt
 ### Yêu cầu
 •	Node.js (phiên bản 20 trở lên được khuyến nghị)
@@ -206,30 +221,7 @@ o	Chế độ sản xuất
 Đầu tiên, điều hướng đến thư mục gốc của dự án và cài đặt tất cả các phụ thuộc:
 Bash
 npm install
-### Biến môi trường
-Dự án này sử dụng các biến môi trường để cấu hình. Bạn cần tạo một file .env ở thư mục gốc của dự án với các biến sau:
-Code snippet
-# Khóa bí mật cho session của Express
-SESSION_SECRET="bpbSgh5wjWSWFbqX2j1Y59LoAHis5Ifka8tMUuVeovXICx0nVwPOt9Zg67CCGOA9Kl/b6bY+884+V1Hb/24wvw=="
 
-# Chuỗi kết nối đến cơ sở dữ liệu PostgreSQL (ví dụ: Neon.tech)
-DATABASE_URL="postgresql://neondb_owner:npg_08hxrYvCEHGl@ep-soft-heart-a5c09ye3.us-east-2.aws.neon.tech/neondb?sslmode=require"
-
-# Các biến riêng lẻ cho kết nối PostgreSQL (có thể được sử dụng bởi một số thư viện)
-PGDATABASE="neondb"
-PGHOST="ep-soft-heart-a5c09ye3.us-east-2.aws.neon.tech"
-PGPORT="5432"
-PGUSER="neondb_owner"
-PGPASSWORD="npg_08hxrYvCEHGl"
-
-# Các biến môi trường cho OpenID Connect (được sử dụng trong server/replitAuth.ts)
-# REPLIT_DOMAINS="your-domain.com,another-domain.com" # Chỉ định các domain được phép
-# REPL_ID="your_client_id"
-# REPL_SECRET="your_client_secret"
-# ISSUER_URL="https://accounts.replit.com" # Hoặc URL issuer OIDC của bạn
-### Lưu ý quan trọng:
-•	Không bao giờ đẩy file .env lên GitHub hoặc các kho lưu trữ công khai! Thêm .env vào file .gitignore của bạn.
-•	Bạn cần thay thế các giá trị placeholder như your_client_id, your_client_secret, và your-domain.com bằng thông tin thực tế của bạn. SESSION_SECRET nên là một chuỗi ngẫu nhiên, mạnh mẽ.
 #Cách chạy dự án
 ## Chế độ phát triển
 Để chạy ứng dụng ở chế độ phát triển với tính năng hot-reloading (nếu được cấu hình bởi Vite cho frontend) và TypeScript transpilation on-the-fly cho backend:
