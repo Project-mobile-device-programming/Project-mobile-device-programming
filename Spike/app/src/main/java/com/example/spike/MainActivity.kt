@@ -28,13 +28,16 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     val userPref = remember { UserPreference(applicationContext) }
 
-                    var isLoggedIn by remember { mutableStateOf(userPref.getCurrentUser() != null) }
+                    // Đọc trạng thái đăng nhập mỗi lần hiển thị
+                    val isLoggedIn = userPref.getCurrentUser() != null
+
                     var loginError by remember { mutableStateOf<String?>(null) }
 
                     val startDestination = if (isLoggedIn) "home" else "login"
 
                     Scaffold(
                         bottomBar = {
+                            // Chỉ hiện bottom bar khi đã đăng nhập
                             if (isLoggedIn) {
                                 BottomNavigationBar(navController)
                             }
@@ -53,8 +56,6 @@ class MainActivity : ComponentActivity() {
                                         val user = userPref.getUser(username)
                                         if (user != null && user.password == password) {
                                             userPref.setCurrentUser(username)
-                                            isLoggedIn = true
-                                            loginError = null
                                             navController.navigate("home") {
                                                 popUpTo("login") { inclusive = true }
                                             }
@@ -85,7 +86,6 @@ class MainActivity : ComponentActivity() {
 
                                         userPref.saveUser(com.example.spike.data.User(username, email, password))
                                         userPref.setCurrentUser(username)
-                                        isLoggedIn = true
 
                                         navController.navigate("home") {
                                             popUpTo("register") { inclusive = true }
@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
                                 var errorMessage by remember { mutableStateOf<String?>(null) }
 
                                 ForgotPasswordScreen(
-                                    errorMessage = errorMessage, // <-- thêm vào ForgotPasswordScreen để hiển thị lỗi
+                                    errorMessage = errorMessage,
                                     onConfirm = { username ->
                                         val user = userPref.getUser(username)
                                         if (user != null) {
@@ -117,7 +117,7 @@ class MainActivity : ComponentActivity() {
                                     onBackClick = {
                                         navController.popBackStack()
                                     },
-                                    onErrorDismiss = { errorMessage = null } // để người dùng có thể tắt thông báo lỗi
+                                    onErrorDismiss = { errorMessage = null }
                                 )
                             }
 
@@ -139,10 +139,22 @@ class MainActivity : ComponentActivity() {
                             }
 
                             // Các màn hình chính
-                            composable("home") { HomeScreen(navController) }
-                            composable("search") { SearchScreen() }
-                            composable("library") { LibraryScreen() }
-                            composable("settings") { SettingsScreen(navController) }
+                            composable("home") {
+                                if (isLoggedIn) HomeScreen(navController)
+                                else navController.navigate("login")
+                            }
+                            composable("search") {
+                                if (isLoggedIn) SearchScreen()
+                                else navController.navigate("login")
+                            }
+                            composable("library") {
+                                if (isLoggedIn) LibraryScreen()
+                                else navController.navigate("login")
+                            }
+                            composable("settings") {
+                                if (isLoggedIn) SettingsScreen(navController)
+                                else navController.navigate("login")
+                            }
                         }
                     }
                 }
