@@ -12,9 +12,10 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun ForgotPasswordScreen(
-    errorMessage: String = "",
+    errorMessage: String? = null,
     onConfirm: (String) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onErrorDismiss: () -> Unit = {}
 ) {
     var username by remember { mutableStateOf("") }
 
@@ -33,16 +34,19 @@ fun ForgotPasswordScreen(
 
         OutlinedTextField(
             value = username,
-            onValueChange = { username = it },
+            onValueChange = {
+                username = it
+                if (errorMessage != null) onErrorDismiss() // reset lỗi khi người dùng nhập lại
+            },
             label = { Text("Tên đăng nhập") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
 
-        if (errorMessage.isNotEmpty()) {
+        errorMessage?.let {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = errorMessage,
+                text = it,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.fillMaxWidth()

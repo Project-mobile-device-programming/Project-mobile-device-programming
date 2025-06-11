@@ -15,11 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun RegisterScreen(
@@ -36,19 +34,18 @@ fun RegisterScreen(
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
 
-    val scrollState = rememberScrollState()
-
-    val isPasswordValid = password.length >= 6
-    val isConfirmPasswordValid = confirmPassword == password && confirmPassword.isNotEmpty()
     val isEmailValid = email.contains("@")
+    val isPasswordValid = password.length >= 6
+    val isConfirmPasswordValid = password == confirmPassword && confirmPassword.isNotBlank()
+
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp)
-            .verticalScroll(scrollState),
+            .verticalScroll(scrollState)
     ) {
-        // Nút quay lại góc trái trên
         Icon(
             imageVector = Icons.Default.ArrowBack,
             contentDescription = "Quay lại",
@@ -68,7 +65,6 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Tài khoản
         OutlinedTextField(
             value = username,
             onValueChange = {
@@ -96,7 +92,6 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Email
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -113,7 +108,6 @@ fun RegisterScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Mật khẩu
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -130,12 +124,14 @@ fun RegisterScreen(
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
                             imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = if (passwordVisible) "Ẩn mật khẩu" else "Hiện mật khẩu"
+                            contentDescription = "Toggle password visibility"
                         )
                     }
                 }
             }
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = confirmPassword,
@@ -153,7 +149,7 @@ fun RegisterScreen(
                     IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
                         Icon(
                             imageVector = if (confirmPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = if (confirmPasswordVisible) "Ẩn mật khẩu" else "Hiện mật khẩu"
+                            contentDescription = "Toggle confirm password visibility"
                         )
                     }
                 }
@@ -164,21 +160,6 @@ fun RegisterScreen(
 
         Button(
             onClick = {
-                if (username.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
-                    return@Button
-                }
-                if (usernameError) {
-                    return@Button
-                }
-                if (!isEmailValid) {
-                    return@Button
-                }
-                if (!isPasswordValid) {
-                    return@Button
-                }
-                if (!isConfirmPasswordValid) {
-                    return@Button
-                }
                 onRegisterClick(username, email, password, confirmPassword)
             },
             enabled = username.isNotBlank() && email.isNotBlank() && password.isNotBlank()

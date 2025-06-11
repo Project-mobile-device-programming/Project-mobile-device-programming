@@ -41,4 +41,17 @@ class UserPreference(context: Context) {
             saveUser(updatedUser)  // saveUser đã xử lý cập nhật rồi
         }
     }
+
+    fun setCurrentUser(username: String) {
+        prefs.edit().putString("current_user", username).apply()
+    }
+
+    fun getCurrentUser(): User? {
+        val username = prefs.getString("current_user", null)
+        return username?.let { getUser(it) }
+    }
+
+    fun logout() {
+        prefs.edit().remove("current_user").apply()
+    }
 }
