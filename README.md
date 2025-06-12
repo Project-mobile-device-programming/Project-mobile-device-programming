@@ -1,15 +1,37 @@
-# Project-mobile-device-programming
+# MOBILE DEVICE PROGRAMMING
+![image](https://github.com/user-attachments/assets/6f30c9f8-5c3c-404d-8744-1310f5972582)# Project-mobile-device-programming
+
+---
+
 ## KẾ HOẠCH TRIỂN KHAI HỆ THỐNG THU PHÍ BẢN QUYỀN NHẠC (1 TUẦN)
+![image](https://github.com/user-attachments/assets/f5c868f0-8d19-455e-a39d-c11d2f5ff973)
+
 ![image](https://github.com/user-attachments/assets/8c49215d-6719-41fd-83c1-433885dc2aba)
 ![image](https://github.com/user-attachments/assets/20b87999-0397-4fe0-a3a4-b45b6390f324)
+
+---
+
 ## SPORTIFY INTERFACE DESIGN SAMPLE
+![image](https://github.com/user-attachments/assets/07ab8481-894c-495a-b170-5d10c3e5f467)
 ![image](https://github.com/user-attachments/assets/bbcf05cb-f11b-49b8-b0d0-08c6c979c3e0)
+
+---
+
 ## CÁC BƯỚC THIẾT KẾ GIAO DIỆN MOBILE APP NGHE NHẠC
 ![image](https://github.com/user-attachments/assets/bb354d4f-32fe-4b28-89dc-b5dd403f5f7e)
+![image](https://github.com/user-attachments/assets/61f8e04a-c963-4713-bbb6-384a5605cd04)
+
+---
+
 ## BẢN THIẾT KẾ CỦA APP 
+![image](https://github.com/user-attachments/assets/c766f99d-d81c-4a9f-bac5-5bded84a4d42)
+
 ![image](https://github.com/user-attachments/assets/bf2cb19a-981f-4dd7-968c-f346fa362193)
 ![image](https://github.com/user-attachments/assets/1b54b03b-be0b-4808-b229-99f1506b007c)
 ![image](https://github.com/user-attachments/assets/cf389fa3-dae6-4c6d-ac7c-932cc6db7282)
+
+---
+
 ## System flow
 
 digraph SpiketuneSystemFlow {
@@ -116,6 +138,8 @@ digraph SpiketuneSystemFlow {
 ![image](https://github.com/user-attachments/assets/43cc31d5-0da3-4e3f-8e88-805cbb3ca010)
 ![image](https://github.com/user-attachments/assets/afd7b401-4d1f-4ee8-b3be-116f8b34a9e4)
 
+---
+
 ### Mô tả giai đoạn dự án:
 
 Dự án hiện đang trong giai đoạn thực thi và tập trung vào việc xây dựng một ứng dụng di động có tên "SPIKETUNE". Ứng dụng này được thiết kế nhằm cung cấp một nền tảng độc đáo, nơi người dùng có thể tương tác với âm nhạc một cách sáng tạo, kết hợp các yếu tố âm thanh để kể những câu chuyện mang đậm dấu ấn cá nhân.
@@ -135,8 +159,105 @@ Tính trực quan và bố cục rõ ràng: Xem xét liệu các thành phần g
 Khả năng nhận diện thương hiệu: Đánh giá hiệu quả của việc sử dụng logo và khẩu hiệu trong việc xây dựng và củng cố nhận diện thương hiệu "SPIKETUNE" ngay từ những tương tác đầu tiên của người dùng.
 Sự hiện diện và chức năng cơ bản của các thành phần: Xác minh rằng tất cả các thành phần giao diện cần thiết cho các chức năng cơ bản như chào đón người dùng, đăng nhập và đăng ký (hoặc thu thập thông tin) đều đã được triển khai ở mức độ ban đầu.
 Tuân thủ các nguyên tắc thiết kế UI/UX cơ bản: Đánh giá xem các thiết kế ban đầu có tuân theo các nguyên tắc cơ bản về trải nghiệm người dùng, chẳng hạn như kích thước các phần tử tương tác đủ lớn, độ tương phản màu sắc phù hợp và luồng tương tác logic hay không.
-### Tiếp tục thực thi dự án:
-#### Giai đoạn build app, application development and improvement, complete complement, anticipated expansion.
+
+---
+
+## Tiếp tục thực thi dự án:
+### Update system flow:
+#### 1. User Authentication (Xác thực người dùng)
+Actors:
+- User
+Use Cases:
+- Register
+- Login
+- Logout
+- Forgot Password
+- Change Password
+- Two-Factor Authentication (optional) 
+![image](https://github.com/user-attachments/assets/5d32f343-6c9c-4114-9073-3d1772b58e58)
+![image](https://github.com/user-attachments/assets/5d73e30a-5d97-49ae-91b0-3c380b94bd75)
+![image](https://github.com/user-attachments/assets/ba0c76d1-ed4e-4345-af14-2be68badcaa6)
+![image](https://github.com/user-attachments/assets/962d12e7-e098-47ad-9852-219bb7d48cce)
+#### 2. Music Playback (Nghe nhạc)
+Actors:
+- User
+Use Cases:
+- Search for Music
+- Browse Music by Genre/Artist
+- Play Song
+- Pause Song
+- Skip Song
+- Repeat Song
+- Shuffle Play
+- Listen Offline (Premium Only)
+![image](https://github.com/user-attachments/assets/1cf27618-16d8-468a-adeb-27a2b6056686)
+![image](https://github.com/user-attachments/assets/d3be3216-c0c9-48c3-938d-14f90498b4d5)
+![image](https://github.com/user-attachments/assets/09c6ec45-5dd4-4817-aace-60ce7e38049f)
+![image](https://github.com/user-attachments/assets/f219f6db-1a27-4b1c-849e-77d74d114e97)
+#### 3. Playlist Management (Quản lý danh sách phát)
+Actors:
+- User
+Use Cases:
+- Create Playlist
+- Add Song to Playlist
+- Remove Song from Playlist
+- Rename Playlist
+- Delete Playlist
+- Play Playlist
+- Follow Playlist
+- Share Playlist
+![image](https://github.com/user-attachments/assets/a6cc9306-53e0-446c-a4df-1fec2355bbd1)
+![image](https://github.com/user-attachments/assets/f66fa45a-2cc8-472a-8f6d-359ef17c10e0)
+#### 4. User Library & Favorites (Thư viện & yêu thích)
+Actors:
+- User
+Use Cases:
+- Like/Dislike Song
+- Save Album
+- Save Artist
+- View Listening History
+- Download Song (Premium Only)
+![image](https://github.com/user-attachments/assets/5032828f-ee54-4fbc-83c5-e9d2829417f8)
+![image](https://github.com/user-attachments/assets/4d18efc3-a67b-452b-a15e-014ab7f50101)
+![image](https://github.com/user-attachments/assets/3fd978a1-6e3b-4f66-a5d4-6c4ec3547888)
+![image](https://github.com/user-attachments/assets/dcbe6e5e-fac6-489f-bb74-ff5bc1f3751d)
+![image](https://github.com/user-attachments/assets/f496cc2b-e3ac-4fbb-bf57-3a6ed249ca3a)
+![image](https://github.com/user-attachments/assets/3f1fa993-8bab-4866-b422-da6f4428b7a9)
+![image](https://github.com/user-attachments/assets/bd3db3ab-29ba-4238-98f5-782cfa4b0bc1)
+![image](https://github.com/user-attachments/assets/546ec593-0817-46f5-92cb-16d504d189f4)
+#### User Library and Favorites Data Model
+![image](https://github.com/user-attachments/assets/cc23c77a-6041-41b1-87c9-8528a9985011)
+#### 5. Social Features (Tính năng xã hội)
+Actors:
+- User
+Use Cases:
+- Follow User
+- View Public Playlists of Followed Users
+- Share Song/Album
+- Send Song to Friend
+- View Activity Feed
+![image](https://github.com/user-attachments/assets/4a9bfe35-b815-47b0-ba7d-4f88eaab9553)
+#### Premium Subscription Management
+![image](https://github.com/user-attachments/assets/23251cf2-86ee-42f2-b237-8f9bd43005bf)
+![image](https://github.com/user-attachments/assets/44be283d-ec75-4924-9032-f82923b06a9b)
+#### 7. Admin Management (Quản trị hệ thống)
+Actors:
+- Admin
+Use Cases:
+- Manage Users (Block/Unblock, View Profiles)
+- Manage Songs (Add/Edit/Delete)
+- Manage Artists & Albums
+- Manage Reports (e.g., Inappropriate Content)
+- View System Analytics
+![image](https://github.com/user-attachments/assets/b78e680a-d9a8-4c46-aa6b-69989f231efc)
+![image](https://github.com/user-attachments/assets/4c4874fa-f90c-455d-bdb1-b3ce4b0d568f)
+![image](https://github.com/user-attachments/assets/6d398020-5d62-4801-a734-b8603e0d6737)
+#### Full-System– SPIKETUNE 
+![image](https://github.com/user-attachments/assets/cd6a37d2-23bf-43c1-b725-255bde659a1b)
+
+---
+
+### Giai đoạn build app, application development and improvement, complete complement, anticipated expansion.
 ![image](https://github.com/user-attachments/assets/e0a93897-2c1f-42d3-9f49-75f9f8ba14c6)
 ![image](https://github.com/user-attachments/assets/5ab85975-7aef-4f67-91e3-872292db7555)
 ![image](https://github.com/user-attachments/assets/e7eb91f6-0c27-4928-a73b-505ee26a8939)
@@ -172,6 +293,9 @@ Tuân thủ các nguyên tắc thiết kế UI/UX cơ bản: Đánh giá xem cá
 ## THỜI ĐIỂM HOÀN THIỆN THỰC THI DỰ ÁN
 Rest-express (Tên dự án: SpikeTuneTech )
 Đây là một dự án ứng dụng web được xây dựng với Express.js ở backend, tích hợp với cơ sở dữ liệu PostgreSQL (qua Drizzle ORM và Neon Serverless), và sử dụng các công nghệ frontend hiện đại như React và Tailwind CSS. Dự án này cũng tích hợp xác thực OpenID Connect sử dụng openid-client và passport.
+
+---
+
 ## Mục lục
 
 •	Giới thiệu
@@ -273,6 +397,7 @@ o	cross-env: Cấu hình biến môi trường đa nền tảng.
 
 ## KHẢ NĂNG BẢO TRÌ, SỬ DỤNG LẠI VÀ MỞ RỘNG DỰA THEO 4 TIÊU CHÍ OOP
 # Tuân thủ chặt chẽ các nguyên tắc OOP và các nguyên tắc thiết kế phần mềm hiện đại khác
+![image](https://github.com/user-attachments/assets/e6d3bf10-3af4-4d82-8037-fb67637c9dbe)
 
 Dưới đây là phân tích dựa trên các giả định hợp lý về một hệ thống lớn như Spotify:
 
