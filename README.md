@@ -11,6 +11,12 @@
 
 ---
 
+## BẢNG THUẬT NGỮ VÀ TỪ VIẾT TẮT
+
+![image](https://github.com/user-attachments/assets/10d1c64a-c26c-480d-98c1-0d3cd4f25eba)
+
+---
+
 ## SPORTIFY INTERFACE DESIGN SAMPLE
 ![image](https://github.com/user-attachments/assets/07ab8481-894c-495a-b170-5d10c3e5f467)
 ![image](https://github.com/user-attachments/assets/bbcf05cb-f11b-49b8-b0d0-08c6c979c3e0)
