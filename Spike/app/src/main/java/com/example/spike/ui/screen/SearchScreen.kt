@@ -21,9 +21,10 @@ import androidx.compose.ui.unit.sp
 import com.example.spike.R
 import com.example.spike.data.SongRepository
 import com.example.spike.ui.components.SongList
+import androidx.navigation.NavHostController
 
 @Composable
-fun SearchScreen() {
+fun SearchScreen(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf("") }
     val allSongs = SongRepository.allSongs
 
