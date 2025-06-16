@@ -269,6 +269,10 @@ Use Cases:
 ![image](https://github.com/user-attachments/assets/21ae3d14-51bf-4414-863e-addffa0226d6)
 
 ---
+#### Scenes 
+![image](https://github.com/user-attachments/assets/0de384d0-9749-4074-8cad-d6f17721d89b)
+![image](https://github.com/user-attachments/assets/482943fb-cd44-4cb9-95be-ebe3d0a5b121)
+![image](https://github.com/user-attachments/assets/21bc11e9-d7ae-4dbf-86f2-f6e62f8683a5)
 
 ### Giai đoạn build app, application development and improvement, complete complement, anticipated expansion.
 ![image](https://github.com/user-attachments/assets/e0a93897-2c1f-42d3-9f49-75f9f8ba14c6)
@@ -302,7 +306,10 @@ Use Cases:
 ![image](https://github.com/user-attachments/assets/a279e9f2-f83a-4dbe-9ee8-fdbf225a0ff3)
 
 ---
+#### Demo 
+[![Watch the video](https://img.youtube.com/vi/PjJNgHHQ2tI/hqdefault.jpg)](https://youtube.com/shorts/PjJNgHHQ2tI)
 
+---
 ## THỜI ĐIỂM HOÀN THIỆN THỰC THI DỰ ÁN
 Rest-express (Tên dự án: SpikeTuneTech )
 Đây là một dự án ứng dụng web được xây dựng với Express.js ở backend, tích hợp với cơ sở dữ liệu PostgreSQL (qua Drizzle ORM và Neon Serverless), và sử dụng các công nghệ frontend hiện đại như React và Tailwind CSS. Dự án này cũng tích hợp xác thực OpenID Connect sử dụng openid-client và passport.
