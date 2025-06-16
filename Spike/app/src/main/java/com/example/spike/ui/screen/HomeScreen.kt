@@ -318,6 +318,7 @@ fun SongList(
             color = Color(0xFF212121),
             modifier = Modifier.padding(bottom = 8.dp)
         )
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -333,12 +334,15 @@ fun SongList(
                 } else {
                     playingIdx == index
                 }
+
+                // Card từng bài hát
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(240.dp)
+                        .height(260.dp)
                         .background(Color(0xFFF0F0F0), MaterialTheme.shapes.medium)
-                        .padding(8.dp)
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
                     Image(
                         painter = painterResource(song.imageRes),
@@ -348,16 +352,23 @@ fun SongList(
                             .aspectRatio(1f),
                         contentScale = ContentScale.Crop
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = song.title,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF212121),
-                        maxLines = 2,
-                        modifier = Modifier.padding(vertical = 2.dp)
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
+
+                    // Tiêu đề bài hát: cố định vùng chiều cao
+                    Box(
+                        modifier = Modifier
+                            .height(40.dp)
+                            .padding(vertical = 2.dp)
+                    ) {
+                        Text(
+                            text = song.title,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color(0xFF212121),
+                            maxLines = 2
+                        )
+                    }
+
+                    // Nút play / pause
                     IconButton(
                         onClick = {
                             val targetIdx = if (isFiltered) originalSongs.indexOf(song) else index
