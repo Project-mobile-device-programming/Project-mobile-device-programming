@@ -356,7 +356,7 @@ fun SongList(
                     // Tiêu đề bài hát: cố định vùng chiều cao
                     Box(
                         modifier = Modifier
-                            .height(40.dp)
+                            .height(50.dp)
                             .padding(vertical = 2.dp)
                     ) {
                         Text(
