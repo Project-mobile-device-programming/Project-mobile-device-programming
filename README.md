@@ -262,6 +262,13 @@ Use Cases:
 ![image](https://github.com/user-attachments/assets/cd6a37d2-23bf-43c1-b725-255bde659a1b)
 
 ---
+#### Nguyên tắc hoạt động đa luồng ngầm định của hệ thống
+![image](https://github.com/user-attachments/assets/86e26ec7-ef26-4ac9-9571-bde5d05eadd3)
+![image](https://github.com/user-attachments/assets/9d1f9aea-cd9c-4da5-ab35-9a97276129bb)
+![image](https://github.com/user-attachments/assets/73964cc4-a897-48d3-a28f-f8faa0313727)
+![image](https://github.com/user-attachments/assets/21ae3d14-51bf-4414-863e-addffa0226d6)
+
+---
 
 ### Giai đoạn build app, application development and improvement, complete complement, anticipated expansion.
 ![image](https://github.com/user-attachments/assets/e0a93897-2c1f-42d3-9f49-75f9f8ba14c6)
