@@ -37,6 +37,134 @@
 ![image](https://github.com/user-attachments/assets/cf389fa3-dae6-4c6d-ac7c-932cc6db7282)
 
 ---
+## MVVM system architecture 
+
+- Tổng quan về MVVM
+
+MVVM là một mẫu kiến trúc phần mềm giúp tách biệt giao diện người dùng (View) khỏi logic nghiệp vụ và dữ liệu (Model) thông qua một lớp trung gian gọi là ViewModel.
+Model (Mô hình): Chịu trách nhiệm về dữ liệu của ứng dụng và logic nghiệp vụ cốt lõi. Nó không có kiến thức trực tiếp về View hay ViewModel.
+View (Giao diện): Là những gì người dùng nhìn thấy và tương tác. Nó chỉ hiển thị dữ liệu từ ViewModel và gửi các hành động của người dùng đến ViewModel. View không chứa logic ứng dụng.
+ViewModel (Trình quản lý giao diện): Hoạt động như một cầu nối giữa Model và View. Nó lấy dữ liệu từ Model, chuẩn bị dữ liệu đó cho View hiển thị, và xử lý các hành động từ View (thường bằng cách tương tác với Model).
+
+Áp dụng MVVM trong ứng dụng Spiketune
+
+Model (Mô hình)
+
+Cấu trúc dữ liệu:
+
+Các interfaces được định nghĩa trong types.ts (ví dụ: Track, Album, Playlist, Artist, User) xác định hình dạng dữ liệu của chúng ta.
+
+Nguồn dữ liệu & Logic nghiệp vụ:
+
+data/mockData.ts: Đây là nguồn dữ liệu chính của chúng ta, mô phỏng một cơ sở dữ liệu hoặc API. Nó chứa:
+
+Các mảng dữ liệu giả lập (mockAlbums, mockPlaylists, mockArtists, etc.).
+
+Các hàm để truy xuất, lọc và thao tác dữ liệu này (ví dụ: getAlbumById, getTrackById, getAllTracks, addPlaylistToMockData).
+
+Logic phát nhạc:
+
+Logic cốt lõi để điều khiển phần tử <audio> (thông qua audioRef trong AppContext) như tải bài hát, phát, tạm dừng, tua, điều chỉnh âm lượng. Đây có thể coi là một phần của Model vì nó là logic "nghiệp vụ" cơ bản
+cho việc phát nhạc.
+
+View (Giao diện)
+
+Thành phần giao diện người dùng (UI Components): Tất cả các thành phần React chịu trách nhiệm hiển thị giao diện người dùng.
+
+pages/*.tsx: Các thành phần View cấp cao nhất cho các màn hình khác nhau (ví dụ: HomePage, AlbumDetailPage, LoginPage, ArtistDetailPage).
+
+components/**/*.tsx: Các thành phần UI có thể tái sử dụng như:
+
+Bố cục chính: Layout, Header, Sidebar, BottomPlayerBar, MainContent.
+
+Hiển thị nội dung: MediaItemCard, TrackItem, CategoryCard.
+
+Form & Tương tác: CreatePlaylistPage, UploadSongPage, UpdateProfilePage.
+
+Thông báo: NotificationContainer, NotificationItem.
+
+Biểu tượng (Icons) & Thành phần phụ trợ: Các file trong components/icons/, components/skeletons/, components/common/.
+
+Trách nhiệm:
+
+Hiển thị dữ liệu được cung cấp bởi ViewModel.
+
+Thu thập đầu vào của người dùng (nhấp chuột, gửi biểu mẫu, v.v.).
+
+Ủy thác các hành động của người dùng cho ViewModel.
+
+Lắng nghe các thay đổi trạng thái trong ViewModel để cập nhật lại giao diện.
+
+ViewModel (Trình quản lý giao diện)
+
+context/AppContext.tsx (thông qua AppProvider và hook useApp): Đây là ViewModel trung tâm và toàn cục của ứng dụng. Nó đóng vai trò trung gian giữa Model và View.
+
+Trách nhiệm:
+
+Quản lý trạng thái (State Management):
+
+Lưu trữ trạng thái liên quan đến UI cần được chia sẻ trên các phần khác nhau của ứng dụng hoặc đại diện cho trạng thái hiện tại của một View.
+
+Ví dụ: currentTrack, isPlaying (cho trình phát), likedSongs, libraryItems (cho thư viện), isAuthenticated, currentUser (cho xác thực), activeAlbumDetail, detailPageIsLoading (cho các trang chi tiết).
+
+Chuẩn bị & Cung cấp dữ liệu:
+
+Lấy dữ liệu từ Model (ví dụ: gọi getAlbumById từ mockData.ts bên trong hàm loadAlbumDetail).
+
+Chuyển đổi hoặc chuẩn bị dữ liệu này khi cần thiết để View hiển thị.
+
+Cung cấp dữ liệu này cho các View (ví dụ: activeAlbumDetail được sử dụng bởi AlbumDetailPage).
+
+Xử lý lệnh / Logic hành động:
+
+Cung cấp các phương thức (commands) mà View có thể gọi để đáp ứng các tương tác của người dùng.
+
+Ví dụ: playTrack, togglePlayPause (điều khiển trình phát), toggleLikeSong (hành động thư viện), loginUser (hành động xác thực), loadAlbumDetail (tải dữ liệu trang chi tiết).
+
+Các phương thức này thường tương tác với Model (ví dụ: playTrack thiết lập audioRef.current.src, loginUser mô phỏng một lệnh gọi API).
+
+Logic giao diện người dùng (UI-related Business Logic):
+
+Quản lý logic hiển thị/ẩn BecomePremiumModal.
+
+Xử lý logic bật/tắt BottomPlayerBar.
+
+Quản lý trạng thái mở/đóng của Sidebar.
+
+Mô phỏng các lệnh gọi API cho việc xác thực và cập nhật hồ sơ.
+
+Quản lý trạng thái tải dữ liệu cho các trang chi tiết.
+
+Luồng tương tác ví dụ:
+
+Người dùng tương tác (View): Người dùng nhấp vào nút "Phát" trên một MediaItemCard (View).
+
+Ủy thác hành động (View -> ViewModel): MediaItemCard gọi phương thức playTrack(trackData) từ AppContext (ViewModel).
+
+Logic ViewModel & Tương tác Model (ViewModel -> Model):
+
+Phương thức playTrack trong AppContext kiểm tra trạng thái premium.
+
+Nó cập nhật trạng thái nội bộ của mình (currentTrack, isPlaying).
+
+Nó tương tác với Model (phần tử <audio> thông qua audioRef.current) bằng cách thiết lập src, gọi load() và play().
+
+Model cập nhật (Model): Phần tử <audio> tải bài hát mới và bắt đầu phát. Trạng thái nội bộ của nó (như currentTime, duration) thay đổi.
+
+Cập nhật trạng thái ViewModel (Model -> ViewModel): Các trình lắng nghe sự kiện trên phần tử <audio> (ví dụ: timeupdate, loadedmetadata, ended) cập nhật trạng thái trong AppContext (ví dụ: currentTime, duration, isPlaying).
+
+View hiển thị lại (ViewModel -> View): Các thành phần đăng ký lắng nghe AppContext (như BottomPlayerBar, TrackItem hiển thị bài hát hiện tại) sẽ hiển thị lại để phản ánh trạng thái mới (ví dụ: thanh tiến trình được cập nhật, biểu tượng phát/tạm dừng thay đổi).
+
+Lợi ích của kiến trúc MVVM trong ứng dụng này:
+
+Tách biệt các mối quan tâm (Separation of Concerns): Giao diện người dùng (View) được tách rời khỏi logic dữ liệu (Model) và logic quản lý trạng thái/giao diện người dùng (ViewModel).
+
+Khả năng kiểm thử (Testability): ViewModel có thể được kiểm thử dễ dàng hơn khi tách biệt khỏi UI. Logic của Model cũng có thể được kiểm thử độc lập.
+
+Khả năng bảo trì (Maintainability): Các thay đổi ở một lớp ít có khả năng làm hỏng các lớp khác. Ví dụ, UI có thể được thiết kế lại mà không cần chạm vào logic lấy dữ liệu trong ViewModel.
+
+Khả năng tái sử dụng (Reusability): ViewModel (AppContext) cung cấp trạng thái và logic được chia sẻ, có thể truy cập bởi nhiều thành phần View khác nhau.
+
 
 ## System flow
 
