@@ -10,10 +10,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -28,6 +28,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -36,12 +37,70 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.spike.R
 import com.example.spike.data.Song
 import com.example.spike.data.SongRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import androidx.navigation.NavHostController
-import androidx.compose.ui.graphics.graphicsLayer
+
+// Lớp quản lý MediaPlayer để đảm bảo an toàn
+class MediaPlayerManager {
+    private var mediaPlayer: MediaPlayer? = null
+
+    fun play(context: Context, audioRes: Int, onCompletion: () -> Unit) {
+        try {
+            mediaPlayer?.release()
+            mediaPlayer = MediaPlayer.create(context, audioRes)?.apply {
+                setOnCompletionListener {
+                    onCompletion()
+                    release()
+                }
+                start()
+            }
+        } catch (e: Exception) {
+            // Log lỗi nếu cần
+        }
+    }
+
+    fun pause() {
+        try {
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
+            }
+        } catch (e: IllegalStateException) {
+            // Log lỗi nếu cần
+        }
+    }
+
+    fun resume() {
+        try {
+            if (mediaPlayer?.isPlaying == false) {
+                mediaPlayer?.start()
+            }
+        } catch (e: IllegalStateException) {
+            // Log lỗi nếu cần
+        }
+    }
+
+    fun release() {
+        try {
+            mediaPlayer?.release()
+        } catch (e: Exception) {
+            // Log lỗi nếu cần
+        } finally {
+            mediaPlayer = null
+        }
+    }
+
+    fun isPlaying(): Boolean {
+        return try {
+            mediaPlayer?.isPlaying == true
+        } catch (e: IllegalStateException) {
+            false
+        }
+    }
+}
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -54,13 +113,13 @@ fun HomeScreen(navController: NavHostController) {
         else songs.filter { it.title.contains(searchQuery, ignoreCase = true) }
     }
     val scrollState = rememberScrollState()
-    var mediaPlayer by remember { mutableStateOf<MediaPlayer?>(null) }
+    val mediaPlayerManager = remember { MediaPlayerManager() }
+    var playingSong by remember { mutableStateOf<Song?>(null) }
     var playingIdx by remember { mutableStateOf<Int?>(null) }
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     var selectedPlaylist by remember { mutableStateOf<String?>(null) }
 
-    // Animate alpha for default content
     val contentAlpha by animateFloatAsState(
         targetValue = if (isSearchActive || searchQuery.isNotBlank()) 0.3f else 1f,
         animationSpec = tween(durationMillis = 300)
@@ -68,8 +127,7 @@ fun HomeScreen(navController: NavHostController) {
 
     DisposableEffect(Unit) {
         onDispose {
-            mediaPlayer?.release()
-            mediaPlayer = null
+            mediaPlayerManager.release()
         }
     }
 
@@ -79,7 +137,7 @@ fun HomeScreen(navController: NavHostController) {
                 .fillMaxSize()
                 .background(Color.White)
                 .verticalScroll(scrollState)
-                .padding(bottom = 72.dp) // Space for MiniPlayer and padding
+                .padding(bottom = 72.dp)
         ) {
             TopBar(
                 searchQuery = searchQuery,
@@ -92,7 +150,6 @@ fun HomeScreen(navController: NavHostController) {
                     keyboardController?.hide()
                 }
             )
-            // Always show search results or prompt when search is active
             if (isSearchActive || searchQuery.isNotBlank()) {
                 if (searchQuery.isBlank()) {
                     Text(
@@ -111,73 +168,85 @@ fun HomeScreen(navController: NavHostController) {
                 } else {
                     SongList(
                         songs = filteredSongs,
-                        mediaPlayer = mediaPlayer,
+                        mediaPlayerManager = mediaPlayerManager,
+                        playingSong = playingSong,
                         playingIdx = playingIdx,
-                        onMediaPlayerChange = { mediaPlayer = it },
+                        onPlayingSongChange = { playingSong = it },
                         onPlayingIdxChange = { playingIdx = it },
                         isFiltered = true,
-                        originalSongs = songs
+                        originalSongs = songs,
+                        context = context
                     )
                 }
             }
-            // Default content with animated alpha
             Column(
                 modifier = Modifier.graphicsLayer(alpha = contentAlpha)
             ) {
                 if (searchQuery.isBlank() && !isSearchActive) {
-                    // Only show default content when search is not active
                     SuggestionTitle()
-                    PlaylistSuggestions(selectedPlaylist = selectedPlaylist, onPlaylistSelected = { selectedPlaylist = it })
+                    PlaylistSuggestions(
+                        selectedPlaylist = selectedPlaylist,
+                        onPlaylistSelected = { selectedPlaylist = it }
+                    )
                     SongList(
                         songs = if (selectedPlaylist == null) songs else SongRepository.playlists[selectedPlaylist] ?: emptyList(),
-                        mediaPlayer = mediaPlayer,
+                        mediaPlayerManager = mediaPlayerManager,
+                        playingSong = playingSong,
                         playingIdx = playingIdx,
-                        onMediaPlayerChange = { mediaPlayer = it },
+                        onPlayingSongChange = { playingSong = it },
                         onPlayingIdxChange = { playingIdx = it },
-                        isFiltered = false
+                        isFiltered = false,
+                        originalSongs = songs,
+                        context = context
                     )
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // Mini Player
-        val currentIdx = playingIdx
-        if (currentIdx != null && currentIdx in songs.indices) {
+        playingSong?.let { currentSong ->
             MiniPlayer(
-                currentSong = songs[currentIdx],
-                isPlaying = mediaPlayer?.isPlaying == true,
+                currentSong = currentSong,
+                isPlaying = mediaPlayerManager.isPlaying(),
                 context = context,
                 onPlayPauseClick = {
-                    if (mediaPlayer?.isPlaying == true) {
-                        mediaPlayer?.pause()
-                        playingIdx = playingIdx // Trigger recomposition
+                    if (mediaPlayerManager.isPlaying()) {
+                        mediaPlayerManager.pause()
                     } else {
-                        mediaPlayer?.start()
-                        playingIdx = playingIdx // Trigger recomposition
+                        mediaPlayerManager.resume()
                     }
                 },
                 onNextClick = {
-                    mediaPlayer?.release()
-                    val nextIdx = if (currentIdx < songs.size - 1) currentIdx + 1 else 0
-                    mediaPlayer = MediaPlayer.create(context, songs[nextIdx].audioRes).apply {
-                        setOnCompletionListener { playingIdx = null }
-                        start()
+                    val allSongs = SongRepository.allSongs
+                    if (allSongs.isEmpty()) return@MiniPlayer
+                    val currentIndex = allSongs.indexOf(currentSong)
+                    val nextIndex = (currentIndex + 1) % allSongs.size
+                    val nextSong = allSongs[nextIndex]
+
+                    mediaPlayerManager.play(context, nextSong.audioRes) {
+                        playingSong = null
+                        playingIdx = null
                     }
-                    playingIdx = nextIdx
+                    playingSong = nextSong
+                    playingIdx = nextIndex
                 },
                 onPreviousClick = {
-                    mediaPlayer?.release()
-                    val prevIdx = if (currentIdx > 0) currentIdx - 1 else songs.size - 1
-                    mediaPlayer = MediaPlayer.create(context, songs[prevIdx].audioRes).apply {
-                        setOnCompletionListener { playingIdx = null }
-                        start()
+                    val allSongs = SongRepository.allSongs
+                    if (allSongs.isEmpty()) return@MiniPlayer
+                    val currentIndex = allSongs.indexOf(currentSong)
+                    val prevIndex = if (currentIndex > 0) currentIndex - 1 else allSongs.size - 1
+                    val prevSong = allSongs[prevIndex]
+
+                    mediaPlayerManager.play(context, prevSong.audioRes) {
+                        playingSong = null
+                        playingIdx = null
                     }
-                    playingIdx = prevIdx
+                    playingSong = prevSong
+                    playingIdx = prevIndex
                 },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp) // Match SearchBar padding
+                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
             )
         }
     }
@@ -274,20 +343,20 @@ fun PlaylistSuggestions(selectedPlaylist: String?, onPlaylistSelected: (String) 
             val isSelected = selectedPlaylist == name
             val bgColor by animateColorAsState(
                 when {
-                    isSelected -> colors[index].copy(alpha = 1f)
-                    clicked -> colors[index].copy(alpha = 0.7f)
-                    else -> colors[index]
+                    isSelected && name == "Top Hits" -> colors[index].copy(alpha = 1f)
+                    clicked && name == "Top Hits" -> colors[index].copy(alpha = 0.7f) // Hiệu ứng nhấn cho Top Hits
+                    else -> colors[index].copy(alpha = 1f) // Giữ màu sáng cho tất cả
                 }
             )
             Box(
                 modifier = Modifier
                     .size(120.dp)
                     .background(bgColor, MaterialTheme.shapes.medium)
-                    .clickable {
+                    .clickable(enabled = name == "Top Hits") { // Chỉ cho bấm vào Top Hits
                         clicked = true
                         onPlaylistSelected(name)
                         scope.launch {
-                            kotlinx.coroutines.delay(300)
+                            delay(300)
                             clicked = false
                         }
                     }
@@ -308,15 +377,15 @@ fun PlaylistSuggestions(selectedPlaylist: String?, onPlaylistSelected: (String) 
 @Composable
 fun SongList(
     songs: List<Song>,
-    mediaPlayer: MediaPlayer?,
+    mediaPlayerManager: MediaPlayerManager,
     playingIdx: Int?,
-    onMediaPlayerChange: (MediaPlayer?) -> Unit,
+    playingSong: Song?,
+    onPlayingSongChange: (Song?) -> Unit,
     onPlayingIdxChange: (Int?) -> Unit,
-    isFiltered: Boolean = false,
-    originalSongs: List<Song> = emptyList()
+    isFiltered: Boolean,
+    originalSongs: List<Song>,
+    context: Context
 ) {
-    val ctx = LocalContext.current
-
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
             text = if (isFiltered) "Kết quả tìm kiếm" else "Bài hát nổi bật",
@@ -342,7 +411,6 @@ fun SongList(
                     playingIdx == index
                 }
 
-                // Card từng bài hát
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -360,7 +428,6 @@ fun SongList(
                         contentScale = ContentScale.Crop
                     )
 
-                    // Tiêu đề bài hát: cố định vùng chiều cao
                     Box(
                         modifier = Modifier
                             .height(50.dp)
@@ -375,21 +442,20 @@ fun SongList(
                         )
                     }
 
-                    // Nút play / pause
                     IconButton(
                         onClick = {
                             val targetIdx = if (isFiltered) originalSongs.indexOf(song) else index
                             if (isPlaying) {
-                                mediaPlayer?.pause()
+                                mediaPlayerManager.pause()
                                 onPlayingIdxChange(null)
+                                onPlayingSongChange(null)
                             } else {
-                                mediaPlayer?.release()
-                                val newMediaPlayer = MediaPlayer.create(ctx, song.audioRes).apply {
-                                    setOnCompletionListener { onPlayingIdxChange(null) }
-                                    start()
+                                mediaPlayerManager.play(context, song.audioRes) {
+                                    onPlayingIdxChange(null)
+                                    onPlayingSongChange(null)
                                 }
-                                onMediaPlayerChange(newMediaPlayer)
                                 onPlayingIdxChange(targetIdx)
+                                onPlayingSongChange(song)
                             }
                         },
                         modifier = Modifier.align(Alignment.End)
@@ -419,10 +485,10 @@ fun MiniPlayer(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(56.dp), // Match SearchBar height
-        color = Color(0xFFF5F5F5).copy(alpha = 0.8f), // Translucent background
+            .height(56.dp),
+        color = Color(0xFFF5F5F5).copy(alpha = 0.8f),
         shape = MaterialTheme.shapes.small,
-        tonalElevation = 4.dp // Add subtle shadow
+        tonalElevation = 4.dp
     ) {
         Row(
             modifier = Modifier
@@ -431,7 +497,6 @@ fun MiniPlayer(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Song Image
             Image(
                 painter = painterResource(currentSong.imageRes),
                 contentDescription = currentSong.title,
@@ -441,7 +506,6 @@ fun MiniPlayer(
                 contentScale = ContentScale.Crop
             )
 
-            // Song Title
             Text(
                 text = currentSong.title,
                 fontSize = 14.sp,
@@ -453,7 +517,6 @@ fun MiniPlayer(
                     .padding(horizontal = 8.dp)
             )
 
-            // Control Buttons
             Row {
                 IconButton(onClick = onPreviousClick) {
                     Icon(

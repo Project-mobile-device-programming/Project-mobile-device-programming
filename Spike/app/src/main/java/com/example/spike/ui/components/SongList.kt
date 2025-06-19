@@ -48,6 +48,7 @@ fun SongList(
         ) {
             itemsIndexed(songs) { index, song ->
                 val isPlaying = (playingIdx == index)
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -63,7 +64,9 @@ fun SongList(
                             .aspectRatio(1f),
                         contentScale = ContentScale.Crop
                     )
+
                     Spacer(modifier = Modifier.height(4.dp))
+
                     Text(
                         text = song.title,
                         fontSize = 14.sp,
@@ -72,18 +75,36 @@ fun SongList(
                         maxLines = 2,
                         modifier = Modifier.padding(vertical = 2.dp)
                     )
+
                     Spacer(modifier = Modifier.weight(1f))
+
                     IconButton(
                         onClick = {
                             if (isPlaying) {
-                                mediaPlayer?.pause()
+                                try {
+                                    mediaPlayer?.pause()
+                                } catch (_: Exception) {}
                                 playingIdx = null
                             } else {
-                                mediaPlayer?.release()
-                                mediaPlayer = MediaPlayer.create(ctx, song.audioRes).apply {
-                                    setOnCompletionListener { playingIdx = null }
-                                    start()
+                                try {
+                                    mediaPlayer?.release()
+                                } catch (_: Exception) {}
+
+                                val newPlayer = MediaPlayer.create(ctx, song.audioRes)
+                                if (newPlayer == null) {
+                                    println("⚠ Không thể tạo MediaPlayer cho ${song.title}")
+                                    return@IconButton
                                 }
+
+                                newPlayer.setOnCompletionListener {
+                                    try {
+                                        newPlayer.release()
+                                    } catch (_: Exception) {}
+                                    playingIdx = null
+                                }
+
+                                newPlayer.start()
+                                mediaPlayer = newPlayer
                                 playingIdx = index
                             }
                         },

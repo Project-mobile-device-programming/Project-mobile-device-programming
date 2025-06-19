@@ -21,11 +21,6 @@ object SongRepository {
     )
 
     val playlists: Map<String, List<Song>> = mapOf(
-        "Top Hits" to listOf(allSongs[0], allSongs[1], allSongs[2], allSongs[4], allSongs[5]),
-        "Chill Vibes" to listOf(allSongs[3], allSongs[6], allSongs[7], allSongs[8]),
-        "Workout" to listOf(allSongs[9], allSongs[10], allSongs[11]),
-        "Ballads" to listOf(allSongs[0], allSongs[3], allSongs[12]),
-        "EDM" to listOf(allSongs[13], allSongs[14]),
-        "Remix" to listOf(allSongs[2], allSongs[5], allSongs[8], allSongs[11])
+        "Top Hits" to allSongs.subList(4, 14) // Chỉ giữ Track 1 đến Track 10
     )
 }
