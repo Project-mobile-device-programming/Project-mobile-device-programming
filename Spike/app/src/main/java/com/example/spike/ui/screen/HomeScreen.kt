@@ -58,6 +58,7 @@ fun HomeScreen(navController: NavHostController) {
     var playingIdx by remember { mutableStateOf<Int?>(null) }
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    var selectedPlaylist by remember { mutableStateOf<String?>(null) }
 
     // Animate alpha for default content
     val contentAlpha by animateFloatAsState(
@@ -126,9 +127,9 @@ fun HomeScreen(navController: NavHostController) {
                 if (searchQuery.isBlank() && !isSearchActive) {
                     // Only show default content when search is not active
                     SuggestionTitle()
-                    PlaylistSuggestions()
+                    PlaylistSuggestions(selectedPlaylist = selectedPlaylist, onPlaylistSelected = { selectedPlaylist = it })
                     SongList(
-                        songs = songs,
+                        songs = if (selectedPlaylist == null) songs else SongRepository.playlists[selectedPlaylist] ?: emptyList(),
                         mediaPlayer = mediaPlayer,
                         playingIdx = playingIdx,
                         onMediaPlayerChange = { mediaPlayer = it },
@@ -256,7 +257,7 @@ fun SuggestionTitle() {
 }
 
 @Composable
-fun PlaylistSuggestions() {
+fun PlaylistSuggestions(selectedPlaylist: String?, onPlaylistSelected: (String) -> Unit) {
     val playlists = listOf("Top Hits", "Chill Vibes", "Workout", "Ballads", "EDM", "Remix")
     val colors = listOf(
         Color(0xFFFF6F61), Color(0xFF6BCB77), Color(0xFF4D96FF),
@@ -270,8 +271,13 @@ fun PlaylistSuggestions() {
     ) {
         itemsIndexed(playlists) { index, name ->
             var clicked by remember { mutableStateOf(false) }
+            val isSelected = selectedPlaylist == name
             val bgColor by animateColorAsState(
-                if (clicked) colors[index].copy(alpha = 0.7f) else colors[index]
+                when {
+                    isSelected -> colors[index].copy(alpha = 1f)
+                    clicked -> colors[index].copy(alpha = 0.7f)
+                    else -> colors[index]
+                }
             )
             Box(
                 modifier = Modifier
@@ -279,6 +285,7 @@ fun PlaylistSuggestions() {
                     .background(bgColor, MaterialTheme.shapes.medium)
                     .clickable {
                         clicked = true
+                        onPlaylistSelected(name)
                         scope.launch {
                             kotlinx.coroutines.delay(300)
                             clicked = false

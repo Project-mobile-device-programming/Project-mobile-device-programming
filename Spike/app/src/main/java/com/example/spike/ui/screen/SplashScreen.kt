@@ -19,7 +19,7 @@ import kotlinx.coroutines.delay
 fun SplashScreen(onTimeout: () -> Unit) {
     // Hiệu ứng typing cho slogan
     var sloganText by remember { mutableStateOf("") }
-    val fullText = "Yoursoundtrack, your story"
+    val fullText = "~ Your Sound Track - Your Story ~"
 
     LaunchedEffect(true) {
         // Hiệu ứng gõ từng ký tự
@@ -45,8 +45,8 @@ fun SplashScreen(onTimeout: () -> Unit) {
             Text(
                 text = sloganText,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.Gray,
+                fontWeight = FontWeight.Bold,
+                color = Color.Blue,
                 textAlign = TextAlign.Center
             )
         }
