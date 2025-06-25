@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "250300788769",
+    "project_id": "spike-82e00",
+    "storage_bucket": "spike-82e00.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250300788769:android:ca9414f44b68949f903360",
+        "android_client_info": {
+          "package_name": "com.example.spike"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "250300788769-apjrtsul627j79kl9sh37p8gd84eocnh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.spike",
+            "certificate_hash": "e36d617656eb1693f542e1364afc74dba134f341"
+          }
+        },
+        {
+          "client_id": "250300788769-71euptiob8dt40uqvlb0l745dkiclft9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcJHiL8zFSPIKetOp-b16RO_7jufpjKGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "250300788769-71euptiob8dt40uqvlb0l745dkiclft9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
