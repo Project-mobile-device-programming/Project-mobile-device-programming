@@ -43,6 +43,8 @@ import com.example.spike.data.Song
 import com.example.spike.data.SongRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.lazy.LazyColumn
+
 
 // Lớp quản lý MediaPlayer để đảm bảo an toàn
 class MediaPlayerManager {
@@ -112,7 +114,6 @@ fun HomeScreen(navController: NavHostController) {
         if (searchQuery.isBlank()) emptyList()
         else songs.filter { it.title.contains(searchQuery, ignoreCase = true) }
     }
-    val scrollState = rememberScrollState()
     val mediaPlayerManager = remember { MediaPlayerManager() }
     var playingSong by remember { mutableStateOf<Song?>(null) }
     var playingIdx by remember { mutableStateOf<Int?>(null) }
@@ -126,82 +127,91 @@ fun HomeScreen(navController: NavHostController) {
     )
 
     DisposableEffect(Unit) {
-        onDispose {
-            mediaPlayerManager.release()
-        }
+        onDispose { mediaPlayerManager.release() }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
-                .verticalScroll(scrollState)
-                .padding(bottom = 72.dp)
+                .navigationBarsPadding(), // đảm bảo cuộn đến sát edge
+            contentPadding = PaddingValues(vertical = 1.dp),
         ) {
-            TopBar(
-                searchQuery = searchQuery,
-                onSearchQueryChange = { searchQuery = it },
-                onSettingsClick = { navController.navigate("settings") },
-                focusRequester = focusRequester,
-                onFocusChanged = { isSearchActive = it || isSearchActive },
-                onSearch = {
-                    isSearchActive = true
-                    keyboardController?.hide()
-                }
-            )
+            item {
+                TopBar(
+                    searchQuery = searchQuery,
+                    onSearchQueryChange = { searchQuery = it },
+                    onSettingsClick = { navController.navigate("settings") },
+                    focusRequester = focusRequester,
+                    onFocusChanged = { isSearchActive = it || isSearchActive },
+                    onSearch = {
+                        isSearchActive = true
+                        keyboardController?.hide()
+                    }
+                )
+            }
+
             if (isSearchActive || searchQuery.isNotBlank()) {
-                if (searchQuery.isBlank()) {
-                    Text(
-                        text = "Hãy nhập từ khóa để tìm kiếm bài hát",
-                        fontSize = 16.sp,
-                        color = Color.Gray,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                } else if (filteredSongs.isEmpty()) {
-                    Text(
-                        text = "Không tìm thấy bài hát phù hợp",
-                        fontSize = 16.sp,
-                        color = Color.Gray,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                } else {
+                item {
+                    if (searchQuery.isBlank()) {
+                        Text(
+                            text = "Hãy nhập từ khóa để tìm kiếm bài hát",
+                            fontSize = 16.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    } else if (filteredSongs.isEmpty()) {
+                        Text(
+                            text = "Không tìm thấy bài hát phù hợp",
+                            fontSize = 16.sp,
+                            color = Color.Gray,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    } else {
+                        SongList(
+                            title = "Kết quả tìm kiếm",
+                            songs = filteredSongs,
+                            mediaPlayerManager = mediaPlayerManager,
+                            playingIdx = playingIdx,
+                            playingSong = playingSong,
+                            onPlayingSongChange = { playingSong = it },
+                            onPlayingIdxChange = { playingIdx = it },
+                            originalSongs = songs,
+                            context = context
+                        )
+                    }
+                }
+            } else {
+                item {
+                    Column(modifier = Modifier.graphicsLayer(alpha = contentAlpha)) {
+                        SuggestionTitle()
+                        PlaylistSuggestions(
+                            selectedPlaylist = selectedPlaylist,
+                            onPlaylistSelected = { selectedPlaylist = it }
+                        )
+                    }
+                }
+
+                item {
                     SongList(
-                        songs = filteredSongs,
+                        title = "Bài hát nổi bật",
+                        songs = if (selectedPlaylist == null) songs else SongRepository.playlists[selectedPlaylist]
+                            ?: emptyList(),
                         mediaPlayerManager = mediaPlayerManager,
-                        playingSong = playingSong,
                         playingIdx = playingIdx,
+                        playingSong = playingSong,
                         onPlayingSongChange = { playingSong = it },
                         onPlayingIdxChange = { playingIdx = it },
-                        isFiltered = true,
                         originalSongs = songs,
                         context = context
                     )
                 }
             }
-            Column(
-                modifier = Modifier.graphicsLayer(alpha = contentAlpha)
-            ) {
-                if (searchQuery.isBlank() && !isSearchActive) {
-                    SuggestionTitle()
-                    PlaylistSuggestions(
-                        selectedPlaylist = selectedPlaylist,
-                        onPlaylistSelected = { selectedPlaylist = it }
-                    )
-                    SongList(
-                        songs = if (selectedPlaylist == null) songs else SongRepository.playlists[selectedPlaylist] ?: emptyList(),
-                        mediaPlayerManager = mediaPlayerManager,
-                        playingSong = playingSong,
-                        playingIdx = playingIdx,
-                        onPlayingSongChange = { playingSong = it },
-                        onPlayingIdxChange = { playingIdx = it },
-                        isFiltered = false,
-                        originalSongs = songs,
-                        context = context
-                    )
-                }
+
+            item {
+                Spacer(modifier = Modifier.height(72.dp)) // ✅ Đệm chống che bởi BottomNavigationBar
             }
-            Spacer(modifier = Modifier.height(16.dp))
         }
 
         playingSong?.let { currentSong ->
@@ -210,19 +220,14 @@ fun HomeScreen(navController: NavHostController) {
                 isPlaying = mediaPlayerManager.isPlaying(),
                 context = context,
                 onPlayPauseClick = {
-                    if (mediaPlayerManager.isPlaying()) {
-                        mediaPlayerManager.pause()
-                    } else {
-                        mediaPlayerManager.resume()
-                    }
+                    if (mediaPlayerManager.isPlaying()) mediaPlayerManager.pause()
+                    else mediaPlayerManager.resume()
                 },
                 onNextClick = {
                     val allSongs = SongRepository.allSongs
-                    if (allSongs.isEmpty()) return@MiniPlayer
                     val currentIndex = allSongs.indexOf(currentSong)
                     val nextIndex = (currentIndex + 1) % allSongs.size
                     val nextSong = allSongs[nextIndex]
-
                     mediaPlayerManager.play(context, nextSong.audioRes) {
                         playingSong = null
                         playingIdx = null
@@ -232,11 +237,9 @@ fun HomeScreen(navController: NavHostController) {
                 },
                 onPreviousClick = {
                     val allSongs = SongRepository.allSongs
-                    if (allSongs.isEmpty()) return@MiniPlayer
                     val currentIndex = allSongs.indexOf(currentSong)
                     val prevIndex = if (currentIndex > 0) currentIndex - 1 else allSongs.size - 1
                     val prevSong = allSongs[prevIndex]
-
                     mediaPlayerManager.play(context, prevSong.audioRes) {
                         playingSong = null
                         playingIdx = null
@@ -341,18 +344,22 @@ fun PlaylistSuggestions(selectedPlaylist: String?, onPlaylistSelected: (String) 
         itemsIndexed(playlists) { index, name ->
             var clicked by remember { mutableStateOf(false) }
             val isSelected = selectedPlaylist == name
+
+            // Tính màu nền tùy vào trạng thái chọn
             val bgColor by animateColorAsState(
-                when {
-                    isSelected && name == "Top Hits" -> colors[index].copy(alpha = 1f)
-                    clicked && name == "Top Hits" -> colors[index].copy(alpha = 0.7f) // Hiệu ứng nhấn cho Top Hits
-                    else -> colors[index].copy(alpha = 1f) // Giữ màu sáng cho tất cả
-                }
+                targetValue = when {
+                    selectedPlaylist == null -> colors[index] // Chưa chọn: sáng hết
+                    isSelected -> colors[index].copy(alpha = 1f) // Đang chọn: sáng
+                    else -> colors[index].copy(alpha = 0.4f) // Không chọn: mờ đi
+                },
+                animationSpec = tween(durationMillis = 300)
             )
+
             Box(
                 modifier = Modifier
                     .size(120.dp)
                     .background(bgColor, MaterialTheme.shapes.medium)
-                    .clickable(enabled = name == "Top Hits") { // Chỉ cho bấm vào Top Hits
+                    .clickable(enabled = true) { // Cho phép bấm tất cả
                         clicked = true
                         onPlaylistSelected(name)
                         scope.launch {
@@ -376,19 +383,19 @@ fun PlaylistSuggestions(selectedPlaylist: String?, onPlaylistSelected: (String) 
 
 @Composable
 fun SongList(
+    title: String,
     songs: List<Song>,
     mediaPlayerManager: MediaPlayerManager,
     playingIdx: Int?,
     playingSong: Song?,
     onPlayingSongChange: (Song?) -> Unit,
     onPlayingIdxChange: (Int?) -> Unit,
-    isFiltered: Boolean,
     originalSongs: List<Song>,
     context: Context
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(
-            text = if (isFiltered) "Kết quả tìm kiếm" else "Bài hát nổi bật",
+            text = title,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
             color = Color(0xFF212121),
@@ -404,12 +411,7 @@ fun SongList(
                 .heightIn(max = 600.dp)
         ) {
             itemsIndexed(songs) { index, song ->
-                val isPlaying = if (isFiltered) {
-                    val originalIndex = originalSongs.indexOf(song)
-                    playingIdx == originalIndex
-                } else {
-                    playingIdx == index
-                }
+                val isPlaying = originalSongs.getOrNull(playingIdx ?: -1) == song
 
                 Column(
                     modifier = Modifier
@@ -428,11 +430,7 @@ fun SongList(
                         contentScale = ContentScale.Crop
                     )
 
-                    Box(
-                        modifier = Modifier
-                            .height(50.dp)
-                            .padding(vertical = 2.dp)
-                    ) {
+                    Box(modifier = Modifier.height(50.dp)) {
                         Text(
                             text = song.title,
                             fontSize = 14.sp,
@@ -444,7 +442,7 @@ fun SongList(
 
                     IconButton(
                         onClick = {
-                            val targetIdx = if (isFiltered) originalSongs.indexOf(song) else index
+                            val originalIndex = originalSongs.indexOf(song)
                             if (isPlaying) {
                                 mediaPlayerManager.pause()
                                 onPlayingIdxChange(null)
@@ -454,7 +452,7 @@ fun SongList(
                                     onPlayingIdxChange(null)
                                     onPlayingSongChange(null)
                                 }
-                                onPlayingIdxChange(targetIdx)
+                                onPlayingIdxChange(originalIndex)
                                 onPlayingSongChange(song)
                             }
                         },
